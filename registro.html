@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div class="registro">
+    <p>Registrate</p>
+    <form>
+    <label>Nombre usuario:</label><br>
+    <input type="text" name="nombre" placeholder="Introduce nombre de usuario" maxlength="15" required><br>
+    <label>Correo:</label><br>
+    <input type="email" name="email" placeholder="Introduce tu correo" required><br>
+    <label>Contraseña:</label><br>
+    <input type="password" name="password" maxlength="15" placeholder="Introduce tu contraseña" required><br>
+    <label>Repite tu Contraseña:</label><br>
+    <input type="password" name="password2" maxlength="15" placeholder="Vuelve a introducir tu contraseña" required><br>
+    <input type="button" value="Regístrate" name="registro" onclick="register()"><br>
+    </form>
+    </div>
+    <div class="login">
+    <p>Si ya estás registrado, logeate.</p>
+    <form>
+    <label>Introduce tu correo:</label><br>
+    <input type="text"  name="correo2" placeholder="Introduce tu correo" required><br>
+    <label>Introduce tu contraseña:</label><br>
+    <input type="password" name="password3" placeholder="Vuelve a introducir tu contraseña" required><br>
+    </form>
+    <input type="button" value="Login" onclick="login()">
+    </div>
+
+<script src="registro.js"></script>
+</body>
+</html>
