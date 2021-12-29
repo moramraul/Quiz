@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <title>QuizRG</title>
+</head>
+
+<body>
+    <header>
+        <div id="welcome">
+            <img src="imagenes/quizCabecera.png" id="cabecera">
+        </div>
+        <div class="registerlogin">
+            <p>Bienvenido a QuizRG.com! Regístrate e inicia sesión para empezar a realizar nuestros fabulosos Quizs!</p>
+            <div class="registro">
+                <p>Registrate</p>
+                <form>
+                    <label>Nombre usuario:</label><br>
+                    <input type="text" name="nombre" placeholder="Introduce nombre de usuario" maxlength="15"
+                        required><br>
+                    <label>Correo:</label><br>
+                    <input type="email" name="email" placeholder="Introduce tu correo" required><br>
+                    <label>Contraseña:</label><br>
+                    <input type="password" name="password" maxlength="15" placeholder="Introduce tu contraseña"
+                        required><br>
+                    <label>Repite tu Contraseña:</label><br>
+                    <input type="password" name="password2" maxlength="15"
+                        placeholder="Vuelve a introducir tu contraseña" required><br>
+                    <input type="button" value="Regístrate" name="registro" onclick="register()"><br>
+                </form>
+            </div>
+            <div class="login">
+                <p>Si ya estás registrado, logeate.</p>
+                <form>
+                    <label>Introduce tu correo:</label><br>
+                    <input type="text" name="correo2" placeholder="Introduce tu correo" required><br>
+                    <label>Introduce tu contraseña:</label><br>
+                    <input type="password" name="password3" placeholder="Vuelve a introducir tu contraseña"
+                        required><br>
+                </form>
+                <input type="button" value="Login" onclick="login()">
+            </div>
+        </div>
+    </header>
+    <div class="pregunta">
+        <form>
+            <div>
+                <p>"Pregunta:"</p>
+                <input type="radio" id="respuesta1" name="respuestas" value="resp1">
+                <label for="respuesta1">Respuesta 1</label>
+                <input type="radio" id="respuesta2" name="respuestas" value="resp2">
+                <label for="respuesta2">Respuesta 2</label>
+                <input type="radio" id="respuesta3" name="respuestas" value="resp3">
+                <label for="respuesta3">Respuesta 3</label>
+                <input type="radio" id="respuesta4" name="respuestas" value="resp4">
+                <label for="respuesta4">Respuesta 4</label>
+            </div>
+            <div>
+                <button type="submit">Siguiente</button>
+            </div>
+        </form>
+    </div>
+    <div class="history">
+        <div>
+            <p>El historial de los ultimos quizs que has relizado</p>
+        </div>
+        <div>
+            <p>La grafica de tu evolucion</p>
+        </div>
+        <div>
+            <p>El TOP 3 de todos los jugadores</p>
+        </div>
+    </div>
+    <script src="registro.js"></script>
+</body>
+
+</html>
