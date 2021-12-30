@@ -121,75 +121,119 @@ function login() {
     var correoAlmacenado = userJson.correo; // Aqui sacamos del Json el correo
     var passAlmacenado = userJson.password; // Y aquí el passworrd
     if (correo == correoAlmacenado && password == passAlmacenado)// Y aquí comparamos si los valores de los inputs coinciden con los almacenados. Si sí:
-        {
-        const logeado = { logeado: 'Si' }; // Creamos el token de logueo
-        var usuarioActualizado = Object.assign(userJson, logeado); //Añadimos el token de logeo al usuario
-        var actualizadoString = JSON.stringify(usuarioActualizado) // Y lo pasamos a string para poder chutarlo al usuario almacenado
-        localStorage.setItem(correo, actualizadoString) // Cosa que hacemos aquí, usando la variable correo, que también es la key del usuario almacenado, así se sobreescribe la información añadiendo el token y no se crea un usuario nuevo
-        var registro = document.querySelector("div[class='registro']");
-        registro.style = "display : none";
-        var login = document.querySelector("div[class='login']");
-        login.style = "display : none";
-        var boton = document.createElement("input");
-        boton.setAttribute("type", "button")
-        boton.setAttribute("value", "logout");
-        boton.setAttribute("onclick", "logout()"); // Cuando logeas salta el juego y un botón para desloguear
-        document.body.appendChild(boton);
-        sacarPreguntas()
+    {
+        sessionStorage.setItem("logeado", "si");
+        location.reload();
+        // const logeado = { logeado: 'Si' }; // Creamos el token de logueo
+        // var usuarioActualizado = Object.assign(userJson, logeado); //Añadimos el token de logeo al usuario
+        // var actualizadoString = JSON.stringify(usuarioActualizado) // Y lo pasamos a string para poder chutarlo al usuario almacenado
+        // localStorage.setItem(correo, actualizadoString) // Cosa que hacemos aquí, usando la variable correo, que también es la key del usuario almacenado, así se sobreescribe la información añadiendo el token y no se crea un usuario nuevo
 
+
+        // var registro = document.querySelector("div[class='registro']");
+        // registro.style = "display : none";
+        // var login = document.querySelector("div[class='login']");
+        // login.style = "display : none";
+        // var logout = document.querySelector(".logout");
+        // logout.style = "display : unset"
     }
     else { alert("Nombre o contraseña incorrectos") }
 }
 
-function logout() { 
-    var registro = document.querySelector("div[class='registro']");
-    registro.style = "display : unset";
-    var login = document.querySelector("div[class='login']");
-    login.style = "display : unset"; 
+function logout() {
+    // var registro = document.querySelector("div[class='registro']");
+    // registro.style = "display : unset";
+    // var login = document.querySelector("div[class='login']");
+    // login.style = "display : unset";
+    // var logout = document.querySelector(".logout");
+    // logout.style = "display : none";
+    sessionStorage.removeItem("logeado");
     var p = document.getElementsByTagName("p");
     var input0 = document.querySelector(".mala");
+
     document.body.removeChild(p[2]);
     document.body.removeChild(input0);
-    console.log(input0)
+    console.log(input0);
     // Cuando deslogueas recuperamos la página inicial. Aquí por ahora lo dejamos así pero cuando conectemos con las preguntas el borrado será más complejo.  
 }
 
-var preguntas = []
+var preguntas = [];
 function sacarPreguntas() {
+    fetch('https://opentdb.com/api.php?amount=1&type=multiple')
+        .then(res => res.json())
+        .then(json => {
+            preguntas.push(json.results);
+            console.log(pregunta);
+            return preguntas;
+        }).then(e => {
+            var formulario = document.createElement("form");
+            formulario.id = "quiz";
+            var parrafo = document.createElement("p");
+            var texto = document.createTextNode(JSON.stringify(preguntas[preguntas.length - 1][0].question));
+            var clasePreg = document.querySelector(".pregunta");
+            parrafo.append(texto);
+            clasePreg.appendChild(formulario);
+            formulario.appendChild(parrafo);
+            var input = document.createElement("input");
+            input.type = 'radio';
+            input.id = 'buena';
+            input.value = 'buena';
+            input.name = "respuesta";
+            var label = document.createElement('label')
+            label.htmlFor = 'buena';
+            label.setAttribute("class", "respuesta");
+            var description = document.createTextNode(JSON.stringify(preguntas[preguntas.length - 1][0].correct_answer));
+            
+            var control = false;
+            var aleatorio = Math.floor(Math.random() * 3);
+            for (j = 0; j < 3; j++) {
+                var input1 = document.createElement("input");
+                input1.name = "respuesta";
+                input1.type = 'radio';
+                input1.setAttribute("id", "mala");
+                input1.value = 'mala';
+                var label1 = document.createElement('label');
+                label1.htmlFor = 'mala';
+                label1.setAttribute("id", "mala");
+                var description1 = document.createTextNode(JSON.stringify(preguntas[preguntas.length - 1][0].incorrect_answers[j]));
+                if (j === aleatorio && control === false) {
+                    control = true;
+                    label.appendChild(description);
+                    formulario.appendChild(input);
+                    formulario.appendChild(label);
+                }
+                label1.appendChild(description1);
+                formulario.appendChild(input1);
+                formulario.appendChild(label1);
+            }
+            var submit1 = document.createElement("input");
+            submit1.type = "button";
+            submit1.value = "Siguiente";
+            submit1.setAttribute("onclick", "siguientePregunta()");
+            formulario.appendChild(submit1);
+        })
+}
 
- fetch('https://opentdb.com/api.php?amount=1&type=multiple')
-    .then(res => res.json())
-    .then(json => {preguntas.push(json.results);
-        return preguntas;
-    }).then(e => {
-         var parrafo = document.createElement("p");
-         var texto = document.createTextNode(JSON.stringify(preguntas[0][0].question));
-         parrafo.append(texto);
-         document.body.appendChild(parrafo);
-         var input = document.createElement("input");
-         input.type = 'radio';
-         input.id = 'buena';
-         input.value ='buena';
-         var label = document.createElement('label')
-        label.htmlFor = 'buena';
-        var description = document.createTextNode(JSON.stringify(preguntas[0][0].correct_answer));
-        label.appendChild(description);
-        document.body.appendChild(input);
-        document.body.appendChild(label);
-        for (i = 0; i< 3; i++) {
-        var input1 = document.createElement("input");
-         input1.type = 'radio';
-         input1.setAttribute("class", "mala");
-         input1.value ='mala1';
-         var label1 = document.createElement('label')
-         label1.htmlFor = 'mala1';
-         label1.setAttribute("class", "mala")
-        var description1 = document.createTextNode(JSON.stringify(preguntas[0][0].incorrect_answers[i]));
-        label1.appendChild(description1);
-        document.body.appendChild(input1);
-        document.body.appendChild(label1);}
-       
-    })}
- 
+var puntuacion = 0;
+var preguntasTotales = 0;
 
+function siguientePregunta() {
+    var form = document.querySelector("#quiz");
+    if (preguntasTotales < 4) {
+        if (form.elements["buena"].checked) {
+            puntuacion++;
+            console.log(puntuacion);
+            form.remove();
+            sacarPreguntas();
+            preguntasTotales++;
+        } else {
+            form.remove();
+            sacarPreguntas();
+            preguntasTotales++;
+        }
+    } else {
+        alert("test terminado, tu resultado es " + puntuacion);
+        form.style = "display : none"
+    }
+}
     
