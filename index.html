@@ -42,40 +42,31 @@
                     <input type="password" name="password3" placeholder="Vuelve a introducir tu contraseña"
                         required><br>
                 </form>
-                <input type="button" value="Login" onclick="login()">
+                <input type="button" value="Login" onclick="login();">
+            </div>
+            <div class="logout">
+                <input type="button" value="Logout" onclick="logout();">
             </div>
         </div>
     </header>
-    <div class="pregunta">
-        <form>
-            <div>
-                <p>"Pregunta:"</p>
-                <input type="radio" id="respuesta1" name="respuestas" value="resp1">
-                <label for="respuesta1">Respuesta 1</label>
-                <input type="radio" id="respuesta2" name="respuestas" value="resp2">
-                <label for="respuesta2">Respuesta 2</label>
-                <input type="radio" id="respuesta3" name="respuestas" value="resp3">
-                <label for="respuesta3">Respuesta 3</label>
-                <input type="radio" id="respuesta4" name="respuestas" value="resp4">
-                <label for="respuesta4">Respuesta 4</label>
-            </div>
-            <div>
-                <button type="submit">Siguiente</button>
-            </div>
-        </form>
+    <div class="empezar">
+        <input type="button" value="Empezar el test" onclick="sacarPreguntas();">
+    </div>
+    <div class="pregunta">  
     </div>
     <div class="history">
-        <div>
-            <p>El historial de los ultimos quizs que has relizado</p>
+        <div id="historial">
+            <p>El historial de los ultimos quizs que has realizado</p>
         </div>
-        <div>
+        <div id="grafica">
             <p>La grafica de tu evolucion</p>
         </div>
-        <div>
+        <div id="top3">
             <p>El TOP 3 de todos los jugadores</p>
         </div>
     </div>
     <script src="registro.js"></script>
+    <script src="display.js"></script>
 </body>
 
 </html>
