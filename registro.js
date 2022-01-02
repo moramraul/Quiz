@@ -6,7 +6,7 @@ class Jugador {
 
     }
 }
-// NO ME LO COJE DESDE FUERA
+// // NO ME LO COJE DESDE FUERA
 // var nombre = document.querySelector("input[name='nombre']").value;
 // var password = document.querySelector("input[name='password']").value;
 // var correo = document.querySelector("input[name='email']").value;
@@ -123,6 +123,7 @@ function login() {
     if (correo == correoAlmacenado && password == passAlmacenado)// Y aquí comparamos si los valores de los inputs coinciden con los almacenados. Si sí:
     {
         sessionStorage.setItem("logeado", "si");
+        sessionStorage.setItem("usuarioActivo", correo)
         location.reload();
         // const logeado = { logeado: 'Si' }; // Creamos el token de logueo
         // var usuarioActualizado = Object.assign(userJson, logeado); //Añadimos el token de logeo al usuario
@@ -148,6 +149,7 @@ function logout() {
     // var logout = document.querySelector(".logout");
     // logout.style = "display : none";
     sessionStorage.removeItem("logeado");
+    sessionStorage.removeItem("usuarioActivo")
     var p = document.getElementsByTagName("p");
     var input0 = document.querySelector(".mala");
 
@@ -165,7 +167,7 @@ function sacarPreguntas() {
             preguntas.push(json.results);
             console.log(pregunta);
             return preguntas;
-        }).then(e => {
+        }).then(() => {
             var formulario = document.createElement("form");
             formulario.id = "quiz";
             var parrafo = document.createElement("p");
@@ -216,10 +218,12 @@ function sacarPreguntas() {
 
 var puntuacion = 0;
 var preguntasTotales = 0;
+var contadorTests = "Test"
+var contadorNumero = 1
 
 function siguientePregunta() {
     var form = document.querySelector("#quiz");
-    if (preguntasTotales < 4) {
+    if (preguntasTotales < 2) {
         if (form.elements["buena"].checked) {
             puntuacion++;
             console.log(puntuacion);
@@ -233,7 +237,35 @@ function siguientePregunta() {
         }
     } else {
         alert("test terminado, tu resultado es " + puntuacion);
-        form.style = "display : none"
+        form.style = "display : none";
+        
+        // if (localStorage.getItem('test') === "0" || "1" || "2" || "3") {
+        //     contadorTests = contadorTests + contadorNumero;
+        //     var test1 = {[contadorTests]: puntuacion};
+        //     var correo1 = sessionStorage.getItem('usuarioActivo');
+        //     var usuarioAlmacenado1 = localStorage.getItem(`${correo1}`)
+        //     var usuarioJson1= JSON.parse(usuarioAlmacenado1);
+        //     var usuarioConTest1 = Object.assign(usuarioJson1, test1);
+        //      var conTestString1 = JSON.stringify(usuarioConTest1); 
+        //      localStorage.setItem(correo1, conTestString1);
+        //     contadorNumero++
+             
+        // }
+        // else {
+        var correo1 = sessionStorage.getItem('usuarioActivo');
+        var test = {test: puntuacion};
+        var usuarioAlmacenado = localStorage.getItem(`${correo1}`)
+        var usuarioJson= JSON.parse(usuarioAlmacenado);
+        var usuarioConTest = Object.assign(usuarioJson, test);
+         var conTestString = JSON.stringify(usuarioConTest);
+         localStorage.setItem(correo1, conTestString);
+         var numTests = {"numero de tests": 1};
+         var usuarioAlmacenado1 = localStorage.getItem(`${correo1}`)
+         var usuarioJson1= JSON.parse(usuarioAlmacenado1);
+         var usuarioConNumTest = Object.assign(usuarioJson1, numTests);
+          var conNumTestString = JSON.stringify(usuarioConNumTest);
+          localStorage.setItem(correo1, conNumTestString); 
+         
+
     }
 }
-    
