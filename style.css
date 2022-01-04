@@ -1,3 +1,7 @@
 body {
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-  }
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  background-color: rgb(33, 165, 226);
+  color: whitesmoke;
+  -webkit-text-stroke: 0.1px;
+  font-weight: lighter;
+}

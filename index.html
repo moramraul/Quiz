@@ -5,11 +5,14 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
+    <script src="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
     <link rel="stylesheet" type="text/css" href="style.css">
     <title>QuizRG</title>
 </head>
 
 <body>
+    
     <header>
         <div id="welcome">
             <img src="imagenes/quizCabecera.png" id="cabecera">
@@ -58,7 +61,7 @@
         <div id="historial">
             <p>El historial de los ultimos quizs que has realizado</p>
         </div>
-        <div id="grafica">
+        <div class="ct-chart ct-perfect-fourth" id="grafica1">
             <p>La grafica de tu evolucion</p>
         </div>
         <div id="top3">
@@ -68,5 +71,4 @@
     <script src="registro.js"></script>
     <script src="display.js"></script>
 </body>
-
 </html>

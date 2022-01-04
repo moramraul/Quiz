@@ -1,15 +1,26 @@
-class Jugador {
-    constructor(nombre, correo, password) {
-        this.nombre = nombre;
+class Usuario {
+    constructor(correo, puntuaciones) {
         this.correo = correo;
-        this.password = password
-
+        this.puntuaciones = puntuaciones;
     }
 }
-// NO ME LO COJE DESDE FUERA
-// var nombre = document.querySelector("input[name='nombre']").value;
-// var password = document.querySelector("input[name='password']").value;
-// var correo = document.querySelector("input[name='email']").value;
+
+class todosUsuarios {
+    constructor(usuario) {
+        this.usuario = usuario;
+    }
+}
+
+class Jugador {
+    constructor(nombre, correo, password, numTests, puntuacion, totalTests) {
+        this.nombre = nombre;
+        this.correo = correo;
+        this.password = password;
+        this.numTests = numTests;
+        this.puntuacion = puntuacion;
+        this.totalTests = totalTests;
+    }
+}
 
 function userName(nombre) {
     var nombre = document.querySelector("input[name='nombre']").value;
@@ -24,17 +35,17 @@ function userName(nombre) {
 }
 function eMail(password) {
     var password = document.querySelector("input[name='email']").value;
-    var valmail
+    var valmail;
     var mail = password.split("@");
     if (mail.length == 2 && mail[1].split(".").length == 2) { valmail = true }
-    else { valmail = false }
-    return valmail
+    else { valmail = false };
+    return valmail;
 }
 
 function passwordMayusc() {
     var password = document.querySelector("input[name='password']").value;
-    var valmay = false
-    var i = 0
+    var valmay = false;
+    var i = 0;
     while (!valmay && i < password.length) {
         if (password.charCodeAt(i) > 64 && password.charCodeAt(i) < 91) { valmay = true }
         else { valmay = false; i++ }
@@ -45,8 +56,8 @@ function passwordMayusc() {
 
 function passwordNums() {
     var password = document.querySelector("input[name='password']").value;
-    var valnums = false
-    var i = 0
+    var valnums = false;
+    var i = 0;
     while (!valnums && i < password.length) {
         if (password.charCodeAt(i) > 47 && password.charCodeAt(i) < 57) { valnums = true }
         else { valnums = false; i++ }
@@ -57,8 +68,8 @@ function passwordNums() {
 
 function passwordSims() {
     var password = document.querySelector("input[name='password']").value;
-    var valsims = false
-    var i = 0
+    var valsims = false;
+    var i = 0;
     while (!valsims && i < password.length) {
         if (password.charCodeAt(i) > 32 && password.charCodeAt(i) < 48) { valsims = true }
         else { valsims = false; i++ }
@@ -70,13 +81,13 @@ function passwordSims() {
 function repetirPass() {
     var password = document.querySelector("input[name='password']").value;
     var password2 = document.querySelector("input[name='password2']").value;
-    var checkPass = true
+    var checkPass = true;
     if (password == password2) { } else { checkPass = false };
     return checkPass
 }
 
 function validatePass() {
-    var valpass = true
+    var valpass = true;
     if (passwordMayusc() && passwordNums() && passwordSims() && repetirPass()) { }
     else { valpass = false }
     return valpass;
@@ -93,11 +104,9 @@ function register() {
     var ok = nameOk && mailOk && passOk;
 
     if (ok) {
-        var user = new Jugador(nombre, correo, password);
+        var user = new Jugador(nombre, correo, password, [], [], 0);
         var user_cadena = JSON.stringify(user);
         localStorage.setItem(user.correo, user_cadena);
-        var registro = document.querySelector("div[class='registro']")
-        registro.style = "display : none";
 
     } else {
         if (!nameOk) {
@@ -123,42 +132,24 @@ function login() {
     if (correo == correoAlmacenado && password == passAlmacenado)// Y aquí comparamos si los valores de los inputs coinciden con los almacenados. Si sí:
     {
         sessionStorage.setItem("logeado", "si");
+        sessionStorage.setItem("usuarioActivo", correo);
         location.reload();
-        // const logeado = { logeado: 'Si' }; // Creamos el token de logueo
-        // var usuarioActualizado = Object.assign(userJson, logeado); //Añadimos el token de logeo al usuario
-        // var actualizadoString = JSON.stringify(usuarioActualizado) // Y lo pasamos a string para poder chutarlo al usuario almacenado
-        // localStorage.setItem(correo, actualizadoString) // Cosa que hacemos aquí, usando la variable correo, que también es la key del usuario almacenado, así se sobreescribe la información añadiendo el token y no se crea un usuario nuevo
-
-
-        // var registro = document.querySelector("div[class='registro']");
-        // registro.style = "display : none";
-        // var login = document.querySelector("div[class='login']");
-        // login.style = "display : none";
-        // var logout = document.querySelector(".logout");
-        // logout.style = "display : unset"
     }
     else { alert("Nombre o contraseña incorrectos") }
 }
 
 function logout() {
-    // var registro = document.querySelector("div[class='registro']");
-    // registro.style = "display : unset";
-    // var login = document.querySelector("div[class='login']");
-    // login.style = "display : unset";
-    // var logout = document.querySelector(".logout");
-    // logout.style = "display : none";
-    sessionStorage.removeItem("logeado");
-    var p = document.getElementsByTagName("p");
-    var input0 = document.querySelector(".mala");
 
-    document.body.removeChild(p[2]);
-    document.body.removeChild(input0);
-    console.log(input0);
+    sessionStorage.removeItem("logeado");
+    sessionStorage.removeItem("usuarioActivo")
+    location.reload();
     // Cuando deslogueas recuperamos la página inicial. Aquí por ahora lo dejamos así pero cuando conectemos con las preguntas el borrado será más complejo.  
 }
 
+
 var preguntas = [];
 function sacarPreguntas() {
+    document.querySelector(".empezar").style = "display : none";
     fetch('https://opentdb.com/api.php?amount=1&type=multiple')
         .then(res => res.json())
         .then(json => {
@@ -183,7 +174,7 @@ function sacarPreguntas() {
             label.htmlFor = 'buena';
             label.setAttribute("class", "respuesta");
             var description = document.createTextNode(JSON.stringify(preguntas[preguntas.length - 1][0].correct_answer));
-            
+
             var control = false;
             var aleatorio = Math.floor(Math.random() * 3);
             for (j = 0; j < 3; j++) {
@@ -207,6 +198,7 @@ function sacarPreguntas() {
                 formulario.appendChild(label1);
             }
             var submit1 = document.createElement("input");
+            submit1.id = "siguiente";
             submit1.type = "button";
             submit1.value = "Siguiente";
             submit1.setAttribute("onclick", "siguientePregunta()");
@@ -214,15 +206,16 @@ function sacarPreguntas() {
         })
 }
 
-var puntuacion = 0;
+
 var preguntasTotales = 0;
+var contadorPuntuacion = 0;
+
 
 function siguientePregunta() {
     var form = document.querySelector("#quiz");
-    if (preguntasTotales < 4) {
+    if (preguntasTotales < 2) {
         if (form.elements["buena"].checked) {
-            puntuacion++;
-            console.log(puntuacion);
+            contadorPuntuacion++;
             form.remove();
             sacarPreguntas();
             preguntasTotales++;
@@ -230,9 +223,43 @@ function siguientePregunta() {
             form.remove();
             sacarPreguntas();
             preguntasTotales++;
-        }
+        }    
     } else {
-        alert("test terminado, tu resultado es " + puntuacion);
-        form.style = "display : none"
+        var submit2 = document.querySelector("#siguiente");
+        submit2.value = "Finalizar Test";
+        alert("test terminado, tu resultado es " + contadorPuntuacion);
+        form.remove();
+        document.querySelector(".empezar").style = "display : unset";
+        var correo1 = sessionStorage.getItem('usuarioActivo');
+        var usuarioAlmacenado = localStorage.getItem(`${correo1}`)
+        var usuarioJson = JSON.parse(usuarioAlmacenado);
+        usuarioJson["totalTests"]++;
+        usuarioJson["numTests"].push(usuarioJson["totalTests"].toString());
+        usuarioJson["puntuacion"].push(contadorPuntuacion);
+        var conTestString = JSON.stringify(usuarioJson);
+        localStorage.setItem(correo1, conTestString);
+        preguntasTotales = 0;
+        contadorPuntuacion = 0;
+
+        grafico(usuarioJson["numTests"], usuarioJson["puntuacion"]);
+
     }
+}
+
+function grafico(labels, series) {
+    new Chartist.Line('.ct-chart', {
+        labels: labels,
+        series: [series] 
+      }, {
+        high: 4,
+        low: 0,
+        fullWidth: true,
+        fullWidth: true,
+        axisY: {
+            onlyInteger: true,
+          },
+        chartPadding: {
+          right: 40
+        }
+      });
 }
