@@ -204,7 +204,7 @@ var contadorPuntuacion = 0;
 function siguientePregunta() {
     var form = document.querySelector("#quiz");
     var tabla = document.querySelector("#tabla");
-    if (preguntasTotales < 2) {
+    if (preguntasTotales < 19) {
         if (form.elements["buena"].checked) {
             contadorPuntuacion++;
             form.remove();
@@ -249,7 +249,7 @@ function grafico(labels, series) {
         labels: labels,
         series: [series]
     }, {
-        high: 4,
+        high: 21,
         low: 0,
         fullWidth: true,
         fullWidth: true,
@@ -313,10 +313,7 @@ function graficaTop3(labels, series) {
 
 function generaTabla(numTests, puntuacion) {
     
-    // Obtener la referencia del elemento body
     var body = document.querySelector("#historial");
-  
-    // Crea un elemento <table> y un elemento <tbody>
     var tabla = document.createElement("table");
     tabla.setAttribute("id", "tabla");
     var tblBody = document.createElement("tbody");
@@ -329,38 +326,26 @@ function generaTabla(numTests, puntuacion) {
     tblBody.appendChild(tituloTablaTest);
     tblBody.appendChild(tituloTablaPunt); 
 
-    // Crea las celdas
     for (var i = 0; i < numTests.length; i++) {
-      // Crea las hileras de la tabla
       var hilera = document.createElement("tr");
   
       for (var j = 0; j < 1; j++) {
-        // Crea un elemento <td> y un nodo de texto, haz que el nodo de
-        // texto sea el contenido de <td>, ubica el elemento <td> al final
-        // de la hilera de la tabla
         var celda = document.createElement("td");
         var textoCelda = document.createTextNode("Test " + numTests[i]);
         celda.appendChild(textoCelda);
         hilera.appendChild(celda);
       }
       for (var k = 0; k < 1; k++) {
-        // Crea un elemento <td> y un nodo de texto, haz que el nodo de
-        // texto sea el contenido de <td>, ubica el elemento <td> al final
-        // de la hilera de la tabla
         var celda2 = document.createElement("td");
         var textoCelda2 = document.createTextNode(puntuacion[i]);
         celda2.appendChild(textoCelda2);
         hilera.appendChild(celda2);
       }
   
-      // agrega la hilera al final de la tabla (al final del elemento tblbody)
       tblBody.appendChild(hilera);
     }
   
-    // posiciona el <tbody> debajo del elemento <table>
     tabla.appendChild(tblBody);
-    // appends <table> into <body>
     body.appendChild(tabla);
-    // modifica el atributo "border" de la tabla y lo fija a "2";
     tabla.setAttribute("border", "2");
   }
