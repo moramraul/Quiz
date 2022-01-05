@@ -1,16 +1,3 @@
-class Usuario {
-    constructor(correo, puntuaciones) {
-        this.correo = correo;
-        this.puntuaciones = puntuaciones;
-    }
-}
-
-class todosUsuarios {
-    constructor(usuario) {
-        this.usuario = usuario;
-    }
-}
-
 class Jugador {
     constructor(nombre, correo, password, numTests, puntuacion, totalTests) {
         this.nombre = nombre;
@@ -33,6 +20,7 @@ function userName(nombre) {
     }
     return valnom
 }
+
 function eMail(password) {
     var password = document.querySelector("input[name='email']").value;
     var valmail;
@@ -107,6 +95,8 @@ function register() {
         var user = new Jugador(nombre, correo, password, [], [], 0);
         var user_cadena = JSON.stringify(user);
         localStorage.setItem(user.correo, user_cadena);
+        alert("Te has registrado correctamente");
+        document.querySelector(".registro").style = "display : none";
 
     } else {
         if (!nameOk) {
@@ -130,7 +120,8 @@ function login() {
     var correoAlmacenado = userJson.correo; // Aqui sacamos del Json el correo
     var passAlmacenado = userJson.password; // Y aquí el passworrd
     if (correo == correoAlmacenado && password == passAlmacenado)// Y aquí comparamos si los valores de los inputs coinciden con los almacenados. Si sí:
-    {
+    {   
+        alert("Has iniciado sesión correctamente");
         sessionStorage.setItem("logeado", "si");
         sessionStorage.setItem("usuarioActivo", correo);
         location.reload();
@@ -139,7 +130,6 @@ function login() {
 }
 
 function logout() {
-
     sessionStorage.removeItem("logeado");
     sessionStorage.removeItem("usuarioActivo")
     location.reload();
@@ -213,6 +203,7 @@ var contadorPuntuacion = 0;
 
 function siguientePregunta() {
     var form = document.querySelector("#quiz");
+    var tabla = document.querySelector("#tabla");
     if (preguntasTotales < 2) {
         if (form.elements["buena"].checked) {
             contadorPuntuacion++;
@@ -223,12 +214,18 @@ function siguientePregunta() {
             form.remove();
             sacarPreguntas();
             preguntasTotales++;
-        }    
+        }
     } else {
+        if (form.elements["buena"].checked) {
+            contadorPuntuacion++;
+        }
         var submit2 = document.querySelector("#siguiente");
         submit2.value = "Finalizar Test";
         alert("test terminado, tu resultado es " + contadorPuntuacion);
         form.remove();
+        if (tabla !== null) {
+        tabla.remove();
+        }
         document.querySelector(".empezar").style = "display : unset";
         var correo1 = sessionStorage.getItem('usuarioActivo');
         var usuarioAlmacenado = localStorage.getItem(`${correo1}`)
@@ -240,26 +237,130 @@ function siguientePregunta() {
         localStorage.setItem(correo1, conTestString);
         preguntasTotales = 0;
         contadorPuntuacion = 0;
-
         grafico(usuarioJson["numTests"], usuarioJson["puntuacion"]);
-
+        topTres();
+        generaTabla(usuarioJson["numTests"], usuarioJson["puntuacion"]);
+        location.reload();
     }
 }
 
 function grafico(labels, series) {
     new Chartist.Line('.ct-chart', {
         labels: labels,
-        series: [series] 
-      }, {
+        series: [series]
+    }, {
         high: 4,
         low: 0,
         fullWidth: true,
         fullWidth: true,
         axisY: {
             onlyInteger: true,
-          },
+        },
         chartPadding: {
-          right: 40
+            right: 40
         }
-      });
+    });
 }
+
+
+
+class top3 {
+    constructor(userTop, puntuacionMaxTop) {
+        this.userTop = userTop;
+        this.puntuacionMaxTop = puntuacionMaxTop;
+    }
+}
+
+
+function topTres() {
+    var topTres = [];
+    for (let i = 0; i < localStorage.length; i++) {
+        let sKey = localStorage.key(i);
+        let aPuntuacion = JSON.parse(localStorage.getItem(sKey)).puntuacion;
+        let maxima = Math.max(...aPuntuacion)
+        // aTodosUsersPuntTop.push("Usuario: " + sKey + " Puntuacion: " + maxima); 
+        topTres.push(new top3(sKey, maxima));
+    }
+    topTres.sort(((a, b) => b.puntuacionMaxTop - a.puntuacionMaxTop));
+    var topTresPuntFinal = [];
+    var topTresUserFinal = [];
+    for (let j = 0; j < 3; j++) {
+        if (topTres[j] !== undefined) {
+            if (topTres[j].puntuacionMaxTop !== -Infinity) {
+                topTresPuntFinal.push(topTres[j].puntuacionMaxTop);
+            topTresUserFinal.push(topTres[j].userTop);
+            }
+            
+        }
+    }
+    graficaTop3(topTresUserFinal, topTresPuntFinal);
+}
+
+
+function graficaTop3(labels, series) {
+    var data = {
+        labels: labels,
+        series: [series]
+    };
+    var options = {
+        high: 5,
+        low: 0
+    };
+    new Chartist.Bar('.ct-chart2', data, options);
+}
+
+
+
+function generaTabla(numTests, puntuacion) {
+    
+    // Obtener la referencia del elemento body
+    var body = document.querySelector("#historial");
+  
+    // Crea un elemento <table> y un elemento <tbody>
+    var tabla = document.createElement("table");
+    tabla.setAttribute("id", "tabla");
+    var tblBody = document.createElement("tbody");
+    var tituloTablaTest = document.createElement("th");
+    var tituloTablaPunt = document.createElement("th");
+    var textoTituloTests = document.createTextNode("Test nº:");
+    var textoTituloPunt = document.createTextNode("Puntuación:");
+    tituloTablaTest.appendChild(textoTituloTests);
+    tituloTablaPunt.appendChild(textoTituloPunt);
+    tblBody.appendChild(tituloTablaTest);
+    tblBody.appendChild(tituloTablaPunt); 
+
+    // Crea las celdas
+    for (var i = 0; i < numTests.length; i++) {
+      // Crea las hileras de la tabla
+      var hilera = document.createElement("tr");
+  
+      for (var j = 0; j < 1; j++) {
+        // Crea un elemento <td> y un nodo de texto, haz que el nodo de
+        // texto sea el contenido de <td>, ubica el elemento <td> al final
+        // de la hilera de la tabla
+        var celda = document.createElement("td");
+        var textoCelda = document.createTextNode("Test " + numTests[i]);
+        celda.appendChild(textoCelda);
+        hilera.appendChild(celda);
+      }
+      for (var k = 0; k < 1; k++) {
+        // Crea un elemento <td> y un nodo de texto, haz que el nodo de
+        // texto sea el contenido de <td>, ubica el elemento <td> al final
+        // de la hilera de la tabla
+        var celda2 = document.createElement("td");
+        var textoCelda2 = document.createTextNode(puntuacion[i]);
+        celda2.appendChild(textoCelda2);
+        hilera.appendChild(celda2);
+      }
+  
+      // agrega la hilera al final de la tabla (al final del elemento tblbody)
+      tblBody.appendChild(hilera);
+    }
+  
+    // posiciona el <tbody> debajo del elemento <table>
+    tabla.appendChild(tblBody);
+    // appends <table> into <body>
+    body.appendChild(tabla);
+    // modifica el atributo "border" de la tabla y lo fija a "2";
+    tabla.setAttribute("border", "2");
+  }
