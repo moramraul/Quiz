@@ -26,14 +26,11 @@ if (sessionStorage.logeado === "si") {
         topTres();
     } else {
         historial.style = "display : none";
-        grafica.style =  "display : none";
+        grafica.style = "display : none";
         top3qs.style = "display: none";
-        
+
     }
-    
-    
-    
-    
+
 } else {
     logoutq.style = "display : none";
     empezar.style = "display : none";

@@ -120,7 +120,7 @@ function login() {
     var correoAlmacenado = userJson.correo; // Aqui sacamos del Json el correo
     var passAlmacenado = userJson.password; // Y aquí el passworrd
     if (correo == correoAlmacenado && password == passAlmacenado)// Y aquí comparamos si los valores de los inputs coinciden con los almacenados. Si sí:
-    {   
+    {
         alert("Has iniciado sesión correctamente");
         sessionStorage.setItem("logeado", "si");
         sessionStorage.setItem("usuarioActivo", correo);
@@ -224,7 +224,7 @@ function siguientePregunta() {
         alert("test terminado, tu resultado es " + contadorPuntuacion);
         form.remove();
         if (tabla !== null) {
-        tabla.remove();
+            tabla.remove();
         }
         document.querySelector(".empezar").style = "display : unset";
         var correo1 = sessionStorage.getItem('usuarioActivo');
@@ -288,9 +288,9 @@ function topTres() {
         if (topTres[j] !== undefined) {
             if (topTres[j].puntuacionMaxTop !== -Infinity) {
                 topTresPuntFinal.push(topTres[j].puntuacionMaxTop);
-            topTresUserFinal.push(topTres[j].userTop);
+                topTresUserFinal.push(topTres[j].userTop);
             }
-            
+
         }
     }
     graficaTop3(topTresUserFinal, topTresPuntFinal);
@@ -303,7 +303,7 @@ function graficaTop3(labels, series) {
         series: [series]
     };
     var options = {
-        high: 5,
+        high: 20,
         low: 0
     };
     new Chartist.Bar('.ct-chart2', data, options);
@@ -312,7 +312,7 @@ function graficaTop3(labels, series) {
 
 
 function generaTabla(numTests, puntuacion) {
-    
+
     var body = document.querySelector("#historial");
     var tabla = document.createElement("table");
     tabla.setAttribute("id", "tabla");
@@ -324,28 +324,28 @@ function generaTabla(numTests, puntuacion) {
     tituloTablaTest.appendChild(textoTituloTests);
     tituloTablaPunt.appendChild(textoTituloPunt);
     tblBody.appendChild(tituloTablaTest);
-    tblBody.appendChild(tituloTablaPunt); 
+    tblBody.appendChild(tituloTablaPunt);
 
     for (var i = 0; i < numTests.length; i++) {
-      var hilera = document.createElement("tr");
-  
-      for (var j = 0; j < 1; j++) {
-        var celda = document.createElement("td");
-        var textoCelda = document.createTextNode("Test " + numTests[i]);
-        celda.appendChild(textoCelda);
-        hilera.appendChild(celda);
-      }
-      for (var k = 0; k < 1; k++) {
-        var celda2 = document.createElement("td");
-        var textoCelda2 = document.createTextNode(puntuacion[i]);
-        celda2.appendChild(textoCelda2);
-        hilera.appendChild(celda2);
-      }
-  
-      tblBody.appendChild(hilera);
+        var hilera = document.createElement("tr");
+
+        for (var j = 0; j < 1; j++) {
+            var celda = document.createElement("td");
+            var textoCelda = document.createTextNode("Test " + numTests[i]);
+            celda.appendChild(textoCelda);
+            hilera.appendChild(celda);
+        }
+        for (var k = 0; k < 1; k++) {
+            var celda2 = document.createElement("td");
+            var textoCelda2 = document.createTextNode(puntuacion[i]);
+            celda2.appendChild(textoCelda2);
+            hilera.appendChild(celda2);
+        }
+
+        tblBody.appendChild(hilera);
     }
-  
+
     tabla.appendChild(tblBody);
     body.appendChild(tabla);
     tabla.setAttribute("border", "2");
-  }
+}
