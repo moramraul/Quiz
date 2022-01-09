@@ -176,6 +176,7 @@ function sacarPreguntas() {
                 var label1 = document.createElement('label');
                 label1.htmlFor = 'mala';
                 label1.setAttribute("id", "mala");
+                label1.setAttribute("class", "respuesta");
                 var description1 = document.createTextNode(JSON.stringify(preguntas[preguntas.length - 1][0].incorrect_answers[j]));
                 if (j === aleatorio && control === false) {
                     control = true;
@@ -187,11 +188,15 @@ function sacarPreguntas() {
                 formulario.appendChild(input1);
                 formulario.appendChild(label1);
             }
+            var enter = document.createElement("br");
+            var enter1 = document.createElement("br");
             var submit1 = document.createElement("input");
             submit1.id = "siguiente";
             submit1.type = "button";
             submit1.value = "Siguiente";
             submit1.setAttribute("onclick", "siguientePregunta()");
+            formulario.appendChild(enter);
+            formulario.appendChild(enter1);
             formulario.appendChild(submit1);
         })
 }
@@ -252,12 +257,11 @@ function grafico(labels, series) {
         high: 21,
         low: 0,
         fullWidth: true,
-        fullWidth: true,
         axisY: {
             onlyInteger: true,
         },
         chartPadding: {
-            right: 40
+            right: 50
         }
     });
 }
@@ -303,8 +307,15 @@ function graficaTop3(labels, series) {
         series: [series]
     };
     var options = {
-        high: 20,
-        low: 0
+        high: 21,
+        low: 0,
+        axisY: {
+            onlyInteger: true,
+        },
+        chartPadding: {
+            right: 50
+        }
+        
     };
     new Chartist.Bar('.ct-chart2', data, options);
 }
